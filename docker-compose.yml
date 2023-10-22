@@ -1,0 +1,28 @@
+version: '3'
+volumes:
+  todos-vol:
+  dbdata:
+services:
+  litres:
+    container_name: litres
+    build: ./
+    command: gunicorn api.core:app -b :8079 --worker-class aiohttp.GunicornWebWorker --reload --access-logfile -
+    ports:
+      - "8079:8079"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12.7-alpine
+    container_name: postgres
+    expose:
+      - 5431
+    volumes:
+      - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
+      - "dbdata:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5431:5431
