@@ -64,7 +64,7 @@ async def create_book(
 async def download_book(
     request: Request, db: Session, user: User, book_id: int
 ) -> Union[StreamResponse, json_response]:
-    book = crud.book.get(db, book_id)
+    book = crud.book.get_to_download(db, book_id)
     if book.is_denied:
         return json_response({'error': 'book is denied'})
     response = FileResponse(path=f'{config.UPLOADS_PATH}/books/{book.file_name}')

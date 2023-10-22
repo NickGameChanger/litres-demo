@@ -59,7 +59,7 @@ class CRUDBook(CRUDBase[Book, BookCreate, BookUpdate]):
             or_(*filters)
         ).all()
 
-    def get(self, db: Session, id: int) -> Optional[Book]:
+    def get_to_download(self, db: Session, id: int) -> Optional[Book]:
         return db.query(self.model).filter(self.model.id == id).filter(~Book.date_published.is_(None)).first()
 
 
